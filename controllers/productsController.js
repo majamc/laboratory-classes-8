@@ -1,4 +1,5 @@
 const Product = require("../models/Product");
+const Cart = require("../models/Cart");
 
 const { MENU_LINKS } = require("../constants/navigation");
 const { STATUS_CODE } = require("../constants/statusCode");
@@ -67,3 +68,10 @@ exports.deleteProduct = async (request, response) => {
 
   response.status(STATUS_CODE.OK).json({ success: true });
 };
+
+exports.addProduct = async (request, response) => {
+  await Product.add(request.body);
+  await Cart.add(request.body.name);
+
+  response.status(STATUS_CODE.FOUND).redirect("/products/new");
+}
